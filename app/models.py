@@ -3,9 +3,23 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from . import login_manager
 from datetime import datetime
-#...
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+class Pitch:
+    '''
+    Pitch class to define Pitch Objects
+    '''
+
+    def __init__(self,id,title,overview,poster,vote_average,vote_count):
+        self.id =id
+        self.title = title
+        self.overview = overview
+        self.poster = "https://image.tmdb.org/t/p/w500/" + poster
+        self.vote_average = vote_average
+        self.vote_count = vote_count
+class User(,UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer,primary_key = True)
     username = db.Column(db.String(255))
