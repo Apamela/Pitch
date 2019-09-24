@@ -20,7 +20,7 @@
     <img src="https://inspirationboost.com/wp-content/uploads/2014/04/No-One-is-Perfect-Quotes.jpg">
     <form>
     <input type="hidden" name="type" value="vote">
-    <input type="hidden" name="answer_id" value="{{ answer.id }}">
+    <input type="hidden" name="pitch_id" value="{{ pitch.id }}">
     {% for upvote in pitches.upvote_set.all %}
         {% if upvote.user == request.user %}
 
@@ -34,7 +34,6 @@
    
         <input type="submit" class="btn btn-sm btn-success" value="Upvote|{{ 0 }}">
 
-    {% endfor %}
 </form>
 
 {% endfor %}
