@@ -2,9 +2,9 @@ from flask import render_template,request,redirect,url_for,abort
 from . import main
 # from ..request import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
-from ..models import User,PhotoProfile
+from ..models import User,Review
 from flask_login import login_required,current_user
-from .. import db,photos
+from .. import db
 
 # Views
 @main.route('/')
@@ -15,7 +15,7 @@ def index():
     '''
 
 @main.route('/pitch/<int:id>')
-def movie(id):
+def pitch(id):
 
     '''
     View pitch page function that returns the pitch details page and its data
