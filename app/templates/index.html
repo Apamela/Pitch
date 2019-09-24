@@ -16,10 +16,28 @@
         <input type="submit"  value="Submit" class="btn btn-default">
     </form>
 
+    <h1>Welcome to pitches</h1>
+    <img src="https://inspirationboost.com/wp-content/uploads/2014/04/No-One-is-Perfect-Quotes.jpg">
+    <form>
+    <input type="hidden" name="type" value="vote">
+    <input type="hidden" name="answer_id" value="{{ answer.id }}">
+    {% for upvote in pitches.upvote_set.all %}
+        {% if upvote.user == request.user %}
+
+            <input type="submit" class="btn btn-sm btn-warning"
+                   value="Downvote|{{ answer.upvote_set.all.count }}">
+        {% else %}
+            {% if forloop.counter == 1 %}
+                <input type="submit" class="btn btn-success" value="Upvote|{{ answer.upvote_set.all.count }}">
+            {% endif %}
+        {% endif %}
+   
+        <input type="submit" class="btn btn-sm btn-success" value="Upvote|{{ 0 }}">
+
+    {% endfor %}
+</form>
+
+{% endfor %}
 </div>
-
-
-
-
 
 {% endblock%}

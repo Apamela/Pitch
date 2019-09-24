@@ -48,22 +48,37 @@ class Role(db.Model):
 
     def __repr__(self):
         return f'User {self.name}'
-class Review(db.Model):
+class Pitch(db.Model):
 
-    __tablename__ = 'reviews'
+    __tablename__ = 'pitch'
 
     id = db.Column(db.Integer,primary_key = True)
-    movie_id = db.Column(db.Integer)
-    movie_title = db.Column(db.String)
+    title = db.Column(db.String)
     image_path = db.Column(db.String)
-    movie_review = db.Column(db.String)
-    posted = db.Column(db.DateTime,default=datetime.utcnow)
+    description=db.column(db.String)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))        
-    def save_review(self):
+    def save_pitch(self):
+        db.session.add(self)
+        db.session.commit()
+
+class Upvote(db.Model):
+    __tablename__ = 'upvotes'
+    id = db.Column(db.Integer,primary_key = True)
+    pitch_id = db.Column(db.Integer,db.ForeignKey("pitches.id")) 
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))  
+    upvote=db.column(db.Integer)
+
+    def save_upvote(self):
         db.session.add(self)
         db.session.commit()
 
     @classmethod
-    def get_reviews(cls,id):
-        reviews = Review.query.filter_by(movie_id=id).all()
-        return reviews
+    def get_upvote(cls,id):
+        upvote=Upvote.query.filter_by(user=current_user,pitch_id=id)
+        upvote_pitch.save_upvote()
+    @classmethod
+    def get_upvote(cls,id):
+        upvote=Upvote.query.filter_by(pitch_id=id).all()
+        return upvotes
+    def __repr__(self):
+        return self.user.username
