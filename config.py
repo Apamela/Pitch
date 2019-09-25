@@ -2,7 +2,13 @@ import os
 
 class Config:
 
-    SECRET_KEY ='a rondom string'
+    SECRET_KEY = 'powerfulsecretkey'
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    # simple mde  configurations
+    SIMPLEMDE_JS_IIFE = True
+    SIMPLEMDE_USE_CDN = True
+
+    # SECRET_KEY ='a rondom string'
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://wecode:pamela@localhost/pitch'
     UPLOADED_PHOTOS_DEST='app/static/photos'
     

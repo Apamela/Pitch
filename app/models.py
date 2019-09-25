@@ -9,7 +9,6 @@ class User(UserMixin,db.Model):
     id = db.Column(db.Integer,primary_key = True)
     username = db.Column(db.String(255))
     email = db.Column(db.String(255),unique = True,index = True)
-    role_id=db.Column(db.Integer,db.ForeignKey('roles.id'))
     pass_secure = db.Column(db.String(255))
     upvotes = db.relationship('Upvote',backref = 'user',lazy = "dynamic")
     pitches= db.relationship('Pitch',backref = 'user',lazy = "dynamic")
@@ -33,15 +32,15 @@ class User(UserMixin,db.Model):
 
 class Pitch(db.Model):
 
-    __tablename__ = 'pitches'
+    __tablename__ ='pitches'
 
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String)
     description=db.Column(db.Text)
     category=db.Column(db.String(255),nullable=False)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id")) 
-    upvotes = db.relationship('Upvote',backref = 'user',lazy = "dynamic")
-    downvotes=db.relationship('Downvote',backref = 'user',lazy = "dynamic")
+    upvotes = db.relationship('Upvote',backref = 'pitch',lazy = "dynamic")
+    downvotes=db.relationship('Downvote',backref = 'pitch',lazy = "dynamic")
 
     def save_pitch(self):
         db.session.add(self)
@@ -87,12 +86,13 @@ class Upvote(db.Model):
         return upvote
     @classmethod
     def get_all_upvote(cls,pitch_id):
-        upvote=Upvote.query.order_by('id').all()
+        upvotes=Upvote.query.order_by('id').all()
         return upvotes
     def __repr__(self):
         return f'{self.user_id}:{self.pitch_id}'
 class Downvote(db.Model):
     __tablename__ = 'downvotes'
+
     id = db.Column(db.Integer,primary_key = True)
     pitch_id = db.Column(db.Integer,db.ForeignKey("pitches.id")) 
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))  

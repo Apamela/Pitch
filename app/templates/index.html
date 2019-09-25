@@ -1,24 +1,16 @@
-{% extends 'base.html'%}
-{% import 'macros.html' as macro%}
-<!-- Styles block -->
-{% block styles%}
-    {{ super() }}
-    <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
-{% endblock %}
-<!-- Content block -->
+{% extends 'base.html'%} 
 {% block content %}
-
-    <h1>Welcome to pitches</h1>
-    <img src="https://inspirationboost.com/wp-content/uploads/2014/04/No-One-is-Perfect-Quotes.jpg">
-   
 <div class="container-fluid welcome-page">
     <div class="container">
+        <img src="http://messages.365greetings.com/wp-content/uploads/2018/06/life-is-beautiful-quotes-03.jpg">
         <div class="row">
             <div class="col-md-12 welcome">
                 {% if current_user.is_authenticated%}
                 <a id="start" class="btn btn-danger animated infinite flash" href="{{url_for('home.index')}}">See all Pitches</a>
                 {% else %}
                 <a id="start" class="btn btn-danger animated infinite flash" href="{{url_for('auth.login')}}">Sign In</a>
+                <a id="start" class="btn btn-success animated infinite flash" href="{{url_for('auth.login')}}">upvote</a>
+                <a id="start" class="btn btn-danger animated infinite flash" href="{{url_for('auth.login')}}">downvote</a>
                 {% endif %}
             </div>
         </div>
