@@ -38,7 +38,7 @@ class Pitch(db.Model):
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String)
     description=db.Column(db.Text)
-    category=db.Column(db.String(255))
+    category=db.Column(db.String(255),nullable=False)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id")) 
     upvotes = db.relationship('Upvote',backref = 'user',lazy = "dynamic")
     downvotes=db.relationship('Downvote',backref = 'user',lazy = "dynamic")
@@ -53,13 +53,26 @@ class Pitch(db.Model):
     def __repr__(self):
         return f'pitch {self.description}'
 
+class Comment(db.Model):
+    __tablename__='comments'
+    
+    id = db.Column(db.Integer,primary_key=True)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= False)
+    description = db.Column(db.Text)
+
+    
+    def __repr__(self):
+        return f"Comment : id: {self.id} comment: {self.description}"
+
 class Upvote(db.Model):
     __tablename__ = 'upvotes'
+
     id = db.Column(db.Integer,primary_key = True)
+    upvote=db.column(db.Integer,default=1)
     pitch_id = db.Column(db.Integer,db.ForeignKey("pitches.id")) 
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))  
-    upvote=db.column(db.Integer,default=1)
-
+    
     def save_upvote(self):
         db.session.add(self)
         db.session.commit()
@@ -73,7 +86,7 @@ class Upvote(db.Model):
         upvote=Upvote.query.filter_by(pitch_id=id).all()
         return upvote
     @classmethod
-    def get_all_upvote(cls,id):
+    def get_all_upvote(cls,pitch_id):
         upvote=Upvote.query.order_by('id').all()
         return upvotes
     def __repr__(self):

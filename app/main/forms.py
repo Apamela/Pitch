@@ -16,11 +16,9 @@ class RegistrationForm(FlaskForm):
     def validate_username(self,data_field):
         if User.query.filter_by(username = data_field.data).first():
             raise ValidationError('That username is taken')
-class ReviewForm(FlaskForm):
-
-    title = StringField('Review title',validators=[Required()])
-    review = TextAreaField('pitch review', validators=[Required()])
-    submit = SubmitField('Submit')
+class CommentForm(FlaskForm):
+	description = TextAreaField('Add comment',validators=[Required()])
+	submit = SubmitField()
 class PitchForm(FlaskForm):
     title = TextAreaField('Title',validators = [Required()])
 	description = TextAreaField(" the pitch you need",validators=[Required()])
