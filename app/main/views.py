@@ -1,19 +1,22 @@
 from flask import render_template,request,redirect,url_for,abort
 from . import main
 # from ..request import get_movies,get_movie,search_movie
-from .forms import ReviewForm,UpdateProfile
-from ..models import User
+from .forms import pitchForm,UpvoteForm
+from ..models import User,pitch,upvote,downvote
 from flask_login import login_required,current_user
 from .. import db,photos
 
 # Views
-@main.route('/')
+@main.route('/',methods=['GET','POST'])
 def index():
-
+  
     '''
     View root page function that returns the index page and its data
     '''
-    return render_template('index.html')
+    upvote=Upvote.get_all_upvotes(pitch_id=pitch.id)
+    title="WELCOME"
+
+    return render_template('index.html',title =title,upvotes=upvotes)
 @main.route('/pitch/<int:id>')
 def pitch(id):
 
@@ -28,54 +31,48 @@ def pitch(id):
 
 
 
-@main.route('/pitch/review/new/<int:id>', methods = ['GET','POST'])
+@main.route('/pitch/new/<int:id>', methods = ['GET','POST'])
 @login_required
-def new_review(id):
+def new_pitch(id):
 
-    form = ReviewForm()
+    form = PitchForm()
     pitch = get_pitch(id)
 
     if form.validate_on_submit():
         title = form.title.data
-        review = form.review.data
-        #update review instance
-        new_review = Review(pitch.id,title,pitch.poster,pitch_review=review,user=current_user)
+        new_upvote= Upvote(pitch.id,title,pitch.poster,pitch_upvote=review,user=current_user)
         #save review method
-        new_review.save_review()
+        new_pitch.save_pitch()
         return redirect(url_for('.pitch',id = pitch.id ))
 
-    title = f'{pitch.title} review'
-    return render_template('new_review.html',title = title, review_form=form, pitch=pitch)
+    title = f'{pitch.title} pitch'
+    return render_template('new_pitches.html',title = title, form=form)
 
-@main.route('/user/<name>')
+@main.route('/pitch/upvote/<int:pitch_id>/upvote', methods = ['GET', 'POST'])
 @login_required
-def profile(name):
-    user = User.query.filter_by(username = name).first()
+def upvote(pitch_id):
+    pitch = Pitch.query.get(pitch_id)
+    user = current_user
+    pitch_upvotes = Upvote.query.filter_by(pitch_id= pitch_id)
+    
+    if Upvote.query.filter(Upvote.user_id==user.id,Upvote.pitch_id==pitch_id).first():
+        return  redirect(url_for('main.index'))
 
-    if user is None:
-        abort(404)
 
-    return render_template("profile/profile.html", user = user)
+    new_upvote = Upvote(pitch_id=pitch_id, user = current_user)
+    new_upvote.save_upvotes()
+    return redirect(url_for('main.index'))
 
 
-@main.route('/user/<name>/update',methods = ['GET','POST'])
+
+@main.route('/pitch/downvote/<int:pitch_id>/downvote', methods = ['GET', 'POST'])
 @login_required
-def update_profile(name):
-    user = User.query.filter_by(username = name).first()
-    if user is None:
-        abort(404)
-
-    form = UpdateProfile()
-
-    if form.validate_on_submit():
-
-        user.bio = form.bio.data
-
-        db.session.add(user)
-        db.session.commit()
-
-        return redirect(url_for('.profile',name=user.username))
-
-    return render_template('profile/update.html',form =form)
+def downvote(pitch_id):
+    pitch = Pitch.query.get(pitch_id)
+    user = current_user
+    pitch_downvotes = Downvote.query.filter_by(pitch_id= pitch_id)
+    
+    if Downvote.query.filter(Downvote.user_id==user.id,Downvote.pitch_id==pitch_id).first():
+        return  redirect(url_for('main.index'))
 
 

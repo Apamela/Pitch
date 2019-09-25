@@ -21,6 +21,11 @@ class ReviewForm(FlaskForm):
     title = StringField('Review title',validators=[Required()])
     review = TextAreaField('pitch review', validators=[Required()])
     submit = SubmitField('Submit')
-class UpdateProfile(FlaskForm):
-    bio = TextAreaField('Tell us about you.',validators = [Required()])
+class PitchForm(FlaskForm):
+    title = TextAreaField('Title',validators = [Required()])
+	description = TextAreaField(" the pitch you need",validators=[Required()])
     submit = SubmitField('Submit')
+class UpvoteForm(FlaskForm):
+      submit = SubmitField()
+class Downvote(FlaskForm):
+    submit = SubmitField()
