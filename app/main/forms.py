@@ -21,9 +21,19 @@ class CommentForm(FlaskForm):
 	submit = SubmitField()
 class PitchForm(FlaskForm):
     title = TextAreaField('Title',validators = [Required()])
-	description = TextAreaField(" the pitch you need",validators=[Required()])
-    submit = SubmitField('Submit')
+    description = TextAreaField(" the pitch you need",validators=[Required()])
+    category = RadioField('Label', choices=[ ('promotionpitch','promotionpitch'), ('interviewpitch','interviewpitch'),('pickuplines','pickuplines'),('productpitch','productpitch')],validators=[Required()])
+	submit = SubmitField('Submit')
+
+class CommentForm(FlaskForm):
+	description = TextAreaField('Add comment',validators=[Required()])
+	submit = SubmitField()
+
 class UpvoteForm(FlaskForm):
-      submit = SubmitField()
+	submit = SubmitField()
+
+
 class Downvote(FlaskForm):
-    submit = SubmitField()
+	submit = SubmitField()
+
+    

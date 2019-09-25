@@ -1,8 +1,8 @@
 from flask import render_template,request,redirect,url_for,abort
 from . import main
 # from ..request import get_movies,get_movie,search_movie
-from .forms import pitchForm,UpvoteForm
-from ..models import User,pitch,upvote,downvote
+from .forms import PitchForm,UpvoteForm
+from ..models import User,Pitch,Upvote,Downvote
 from flask_login import login_required,current_user
 from .. import db,photos
 
@@ -13,10 +13,19 @@ def index():
     '''
     View root page function that returns the index page and its data
     '''
-    upvote=Upvote.get_all_upvotes(pitch_id=pitch.id)
-    title="WELCOME"
+    
+    pitch = Pitch.query.filter_by().first()
+    title = 'Home'
+    pickuplines = Pitch.query.filter_by(category="pickuplines")
+    interviewpitch = Pitch.query.filter_by(category = "interviewpitch")
+    promotionpitch = Pitch.query.filter_by(category = "promotionpitch")
+    productpitch = Pitch.query.filter_by(category = "productpitch")
 
-    return render_template('index.html',title =title,upvotes=upvotes)
+    upvotes = Upvote.get_all_upvotes(pitch_id=Pitch.id)
+    
+
+    return render_template('home.html', title = title, pitch = pitch, pickuplines=pickuplines, interviewpitch= interviewpitch, promotionpitch = promotionpitch, productpitch = productpitch, upvotes=upvotes)
+    
 @main.route('/pitch/<int:id>')
 def pitch(id):
 
