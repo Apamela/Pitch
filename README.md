@@ -15,8 +15,7 @@
   * source virtual/bin/activate
   * pip install -r requirements.txt
 
-## Technical Requirements
-   This can be found in the specs.md file.
+
 ## Technologies Used
   * Python 3.6.5
   * HTML, CSS and Bootstrap
