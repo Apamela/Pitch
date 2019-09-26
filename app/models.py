@@ -3,7 +3,9 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from . import login_manager
 from datetime import datetime
-
+@login_manager.user_loader
+def load_user(user_id):
+        return User.query.get (user_id)
 class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer,primary_key = True)
@@ -13,9 +15,7 @@ class User(UserMixin,db.Model):
     upvotes = db.relationship('Upvote',backref = 'user',lazy = "dynamic")
     pitches= db.relationship('Pitch',backref = 'user',lazy = "dynamic")
     downvotes= db.relationship('Downvote',backref = 'user',lazy = "dynamic")
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get (user_id)
+   
     @property
     def password(self):
             raise AttributeError('You cannot read the password attribute')

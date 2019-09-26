@@ -1,11 +1,10 @@
 from flask import render_template,request,redirect,url_for,abort
 from . import main
-# from ..request import get_movies,get_movie,search_movie
-from .forms import PitchForm,UpvoteForm
+from .forms import PitchForm,UpvoteForm,CommentForm
 from ..models import User,Pitch,Upvote,Downvote
 from flask_login import login_required,current_user
-from .. import db,photos
-
+from .. import db
+from flask.views import View,MethodView
 # Views
 @main.route('/',methods=['GET','POST'])
 def index():
@@ -15,7 +14,7 @@ def index():
     '''
     
     pitch = Pitch.query.filter_by().first()
-    title = 'Home'
+    title = 'Welcome'
     pickuplines = Pitch.query.filter_by(category="pickuplines")
     interviewpitch = Pitch.query.filter_by(category = "interviewpitch")
     promotionpitch = Pitch.query.filter_by(category = "promotionpitch")
@@ -26,20 +25,6 @@ def index():
 
     return render_template('index.html', title = title, pitch = pitch, pickuplines=pickuplines, interviewpitch= interviewpitch, promotionpitch = promotionpitch, productpitch = productpitch, upvotes=upvotes)
     
-# @main.route('/pitch/<int:id>')
-# def pitch(id):
-
-#     '''
-#     View pitch page function that returns the pitch details page and its data
-#     '''
-#     pitch = get_pitch(id)
-#     title = f'{pitch.title}'
-#     reviews = Review.get_reviews(pitch.id)
-
-#     return render_template('pitch.html',title = title,pitch = pitch,reviews = reviews)
-
-
-
 @main.route('/pitches/new/', methods = ['GET','POST'])
 @login_required
 def new_pitch():
@@ -48,7 +33,7 @@ def new_pitch():
     if form.validate_on_submit():
         description = form.description.data
         title = form.title.data
-        owner_id = current_user
+        # owner_id = current_user
         category = form.category.data
         print(current_user._get_current_object().id)
         new_pitch = Pitch(owner_id =current_user._get_current_object().id, title = title,description=description,category=category)
@@ -95,13 +80,6 @@ def upvote(pitch_id):
     new_upvote = Upvote(pitch_id=pitch_id, user = current_user)
     new_upvote.save_upvotes()
     return redirect(url_for('main.index'))
-
-
-
-#    new_upvote = Upvote(user=current_user, pitch=pitch, vote_number=1)
-#    new_vote.save_vote()
-# return redirect(url_for('main.index'))
-
 
 @main.route('/pitch/downvote/<int:pitch_id>/downvote', methods = ['GET', 'POST'])
 @login_required
