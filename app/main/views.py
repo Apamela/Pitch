@@ -6,7 +6,7 @@ from flask_login import login_required,current_user
 from .. import db
 from flask.views import View,MethodView
 # Views
-@main.route('/',methods=['GET','POST'])
+@main.route('/hello')
 def index():
   
     '''
@@ -15,15 +15,8 @@ def index():
     
     pitch = Pitch.query.filter_by().first()
     title = 'Welcome'
-    pickuplines = Pitch.query.filter_by(category="pickuplines")
-    interviewpitch = Pitch.query.filter_by(category = "interviewpitch")
-    promotionpitch = Pitch.query.filter_by(category = "promotionpitch")
-    productpitch = Pitch.query.filter_by(category = "productpitch")
-
-    upvotes = Upvote.get_all_upvote(pitch_id=Pitch.id)
     
-
-    return render_template('index.html', title = title, pitch = pitch, pickuplines=pickuplines, interviewpitch= interviewpitch, promotionpitch = promotionpitch, productpitch = productpitch, upvotes=upvotes)
+    return render_template('index.html', title = title, pitch = pitch )
     
 @main.route('/pitches/new/', methods = ['GET','POST'])
 @login_required

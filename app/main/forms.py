@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
 class PitchForm(FlaskForm):
     title = TextAreaField('Title',validators = [Required()])
     description = TextAreaField(" the pitch you need",validators=[Required()])
-    category = RadioField('Label', choices=[ ('promotionpitch','promotionpitch'), ('interviewpitch','interviewpitch'),('pickuplines','pickuplines'),('productpitch','productpitch')],validators=[Required()])
+    category = RadioField('Label', choices=validators=[Required()])
     submit = SubmitField('Submit')
 
 class CommentForm(FlaskForm):
