@@ -15,9 +15,13 @@ def index():
     
     pitch = Pitch.query.filter_by().first()
     title = 'Welcome'
+    quotes = Pitch.query.filter_by(category="quotes")
+    interviewpitch = Pitch.query.filter_by(category = "interviewpitch")
+    promotionpitch = Pitch.query.filter_by(category = "promotionpitch")
+    productpitch = Pitch.query.filter_by(category = "productpitch")
 
     upvotes = Upvote.get_all_upvotes(pitch_id=Pitch.id)
-    return render_template('index.html', title = title, pitch = pitch)
+    return render_template('index.html', title = title, pitch = pitch,quotes=quotes,interviewpitch=interviewpitch,promotionpitch=promotionpitch,productionpitch=productionpitch)
     
 @main.route('/pitches/new/', methods = ['GET','POST'])
 @login_required
@@ -27,10 +31,10 @@ def new_pitch():
     if form.validate_on_submit():
         description = form.description.data
         title = form.title.data
-        owner_id = current_user
+        user_id = current_user
         category = form.category.data
         print(current_user._get_current_object().id)
-        new_pitch = blog(owner_id =current_user._get_current_object().id, title = title,description=description,category=category)
+        new_pitch = blog(user_id =current_user._get_current_object().id, title = title,description=description,category=category)
         db.session.add(new_pitch)
         db.session.commit()
         
