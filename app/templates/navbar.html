@@ -8,10 +8,19 @@
               <span class="icon-bar"></span>
             </button>
             <ul>
-            <a style="text-align: center; color: whitesmoke;" class="navbar-brand" href="/pitches/new/"> Post a Pitch </a>
+            <a style="text-align: center; color: rgb(37, 35, 35);" class="navbar-brand" href="/pitches/new/"> Post a Pitch </a>
             </ul>
         </div>
         <div class="navbar-nav">
-            <a style="text-align: center; color: whitesmoke;" class="navbar-brand" href="/"> Home </a>
-
+            <a style="text-align: center; color:rgb(41, 4, 4);" class="navbar-brand" href="/"> Home </a>
         </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              {% if current_user.is_authenticated %}
+              <li style="color:rgb(39, 4, 4)">{{current_user.username}}</li>
+              <li><a style="color: rgb(61, 55, 55);"  href="{{url_for('auth.logout')}}">Sign out</a></li>
+              {% else %}
+              <li><a style="color: rgb(75, 73, 73);" href="{{url_for('auth.login')}}">Sign in</a></li>
+              {%endif%}
+            </ul>
+          </div>

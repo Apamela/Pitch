@@ -6,7 +6,7 @@ from flask_login import login_required,current_user
 from .. import db
 from flask.views import View,MethodView
 # Views
-@main.route('/hello')
+@main.route('/')
 def index():
   
     '''
@@ -15,8 +15,9 @@ def index():
     
     pitch = Pitch.query.filter_by().first()
     title = 'Welcome'
-    
-    return render_template('index.html', title = title, pitch = pitch )
+
+    upvotes = Upvote.get_all_upvotes(pitch_id=Pitch.id)
+    return render_template('index.html', title = title, pitch = pitch)
     
 @main.route('/pitches/new/', methods = ['GET','POST'])
 @login_required
@@ -26,16 +27,16 @@ def new_pitch():
     if form.validate_on_submit():
         description = form.description.data
         title = form.title.data
-        # owner_id = current_user
+        owner_id = current_user
         category = form.category.data
         print(current_user._get_current_object().id)
-        new_pitch = Pitch(owner_id =current_user._get_current_object().id, title = title,description=description,category=category)
+        new_pitch = blog(owner_id =current_user._get_current_object().id, title = title,description=description,category=category)
         db.session.add(new_pitch)
         db.session.commit()
         
         
         return redirect(url_for('main.index'))
-    return render_template('pitches.html',form=form)
+    return render_template('pitch.html',form=form)
 
 
 
